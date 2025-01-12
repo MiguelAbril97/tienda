@@ -1,0 +1,19 @@
+{% extends "principal.html" %}
+
+{%block cabecera%}
+
+<h1>Enlaces</h1>
+{% endblock %}
+
+{%block contenido%}
+            <ul>
+                <li><a href="{% url 'categoria_editar' 7%}">Actualizar una categoria</a></li>
+                <li><a href="{% url 'usuario_editar' 7 %}">Actualizar un usuario</a></li>
+                <li><a href="{% url 'producto_editar' 7 %}">Actualizar un producto</a></li>
+                <li><a href="{% url 'calzado_editar' 7 %}">Actualizar un calzado</a></li>
+                <li><a href="{% url 'mueble_editar' 7 %}">Actualizar un mueble</a></li>
+                <li><a href="{% url 'consola_editar' 7 %}">Actualizar una consola</a></li>
+                            
+            </ul>
+
+{% endblock %}
