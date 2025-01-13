@@ -1,4 +1,9 @@
 {% extends "principal.html" %}
+{% load static %}
+
+{%block js%}
+<script type="text/javascript" src="{% static 'registration.js' %}"></script>
+{%endblock%}
 {% block contenido %}
 <form action = "{% url 'registrar_usuario' %}" method = "post"> 
     

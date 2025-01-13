@@ -1,32 +1,43 @@
 from django import forms
 from django.forms import ModelForm
+from django.contrib.auth.forms import UserCreationForm
 from django.db.models import Q,Prefetch
 from .models import *
 from datetime import date
 import datetime
 
 #CRUD de Usuario
-class UsuarioForm(ModelForm):
+class UsuarioForm(UserCreationForm):
+   
     roles = (
+        ('', 'Seleccione un rol'),
+        (Usuario.COMPRADOR, 'comprador'),
         (Usuario.VENDEDOR, 'vendedor'),
-        (Usuario.COMPRADOR, 'comprador')
-    ) 
+    )
     
-    rol = forms.ChoiceField(choices=roles)
+    rol = forms.ChoiceField(choices=roles, required=True)
+    nombreUsuario = forms.CharField(max_length=60, label="Nombre de Usuario")
+    correo_electronico = forms.EmailField(label="Correo Electrónico")
+    telefono = forms.CharField(max_length=9, label="Teléfono")
+    direccion = forms.CharField(max_length=150, label="Dirección")
     
+    # Comprador
+    nombre = forms.CharField(max_length=60, required=False, label="Nombre")
+    apellidos = forms.CharField(max_length=60, required=False, label="Apellidos")
+    
+    # Vendedor
+    razonSocial = forms.CharField(max_length=150, required=False, label="Razón Social")
+    direccionFiscal = forms.CharField(max_length=150, required=False, 
+                                      label="Dirección Fiscal. Dejelo en blanco si es igual a su dirección")
+   
     class Meta:
         model = Usuario
-        fields = ('rol','nombreUsuario','correo_electronico',
-                  'telefono','direccion')
-        labels = {
-            'nombreUsuario':("Nombre de usuario"), 
-            'correo_electronico':('Direccion de email'),
-            'direccion':('Introduzca su dirección')
-        }        
-        
+        fields = ('rol', 'nombreUsuario', 'correo_electronico',
+            'telefono', 'direccion', 'password1', 'password2',
+            'nombre', 'apellidos', 'razonSocial', 'direccionFiscal')     
         #Al usar el widget de email obligo al usuario a introducir un email con el formato correcto
         widgets = {
-            'correo_electronico': forms.EmailInput()
+            'correo_electronico': forms.EmailInput(),
         }    
     
     def clean(self):
@@ -36,6 +47,13 @@ class UsuarioForm(ModelForm):
         correo_electronico = self.cleaned_data.get('correo_electronico')
         telefono = self.cleaned_data.get('telefono')
         direccion = self.cleaned_data.get('direccion')
+        rol = self.cleaned_data.get('rol')
+        nombre = self.cleaned_data.get('nombre')
+        apellidos = self.cleaned_data.get('apellidos')
+        razonSocial = self.cleaned_data.get('razonSocial')
+        direccionFiscal = self.cleaned_data.get('direccionFiscal')
+
+
         
         #Compruebo que el correo electronico no se repita, asi puedo usar el formulario para editar 
         # si el id es del propio objeto segura, si no os envia un mensaje de error 
@@ -50,6 +68,18 @@ class UsuarioForm(ModelForm):
          #Comprobamos que el campo telefono tenga 9 caracteres        
         if len(telefono) != 9:
             self.add_error('telefono','Debe tener 9 caracteres')
+        
+        if rol == str(Usuario.COMPRADOR):
+            if not nombre or not apellidos:
+                self.add_error('nombre', 'Campo obligatorio')
+                self.add_error('apellidos','Campo obligatorio')
+        
+        elif rol == str(Usuario.VENDEDOR):
+            if not razonSocial:
+                self.add_error('razonSocial', 'Campo obligatorio')
+            if not direccionFiscal:
+                #self.cleaned_data['direccionFiscal'] = direccion
+                direccionFiscal = direccion
         
         return self.cleaned_data
 
