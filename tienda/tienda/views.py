@@ -20,7 +20,7 @@ def index(request):
 
 def logout(request):
     logout(request)
-    return render(request, 'index.html')
+    return redirect('index')
 
 #3 Esta view muestra toda la informacion de un producto
 def muestra_producto(request, id_producto):
