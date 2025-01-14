@@ -20,11 +20,10 @@ urlpatterns = [
      
     path('calzados/listar', views.calzados_listar, name="calzados_listar"),
     
-    #URLS DE FORMULARIO#
-    
-    #CRUD usuario
+    #registro    
     path('usuario/registrar',views.registrar_usuario, name='registrar_usuario'),
-    #path('usuario/logout',views.logout, name='logout'),
+
+    #CRUD usuario
     path('usuario/buscar',views.usuario_buscar,name="usuario_buscar"),
     path('usuarios/actualizar/<int:usuario_id>/', views.usuario_editar, name='usuario_editar'),
     path('usuario/eliminar/<int:usuario_id>/', views.usuario_eliminar, name='usuario_eliminar'),

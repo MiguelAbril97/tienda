@@ -7,7 +7,7 @@ from .forms import *
 from django.contrib import messages
 from django.views.defaults import page_not_found, permission_denied, bad_request, server_error
 from datetime import datetime
-from django.contrib.auth import login,logout
+from django.contrib.auth import login,logout,authenticate
 from django.contrib.auth.decorators import permission_required
 from django.contrib.auth.models import Group
 
@@ -17,10 +17,6 @@ from django.contrib.auth.models import Group
 #
 def index(request):
     return render(request, "index.html")
-
-def logout(request):
-    logout(request)
-    return redirect('index')
 
 #3 Esta view muestra toda la informacion de un producto
 def muestra_producto(request, id_producto):
@@ -98,6 +94,8 @@ def registrar_usuario(request):
         formulario = UsuarioForm()
     return render(request, 'registration/signup.html', {'formulario': formulario})
 
+   
+"""
 def usuario_crear(request): 
     datosFormulario = None
    
@@ -124,6 +122,7 @@ def crear_usuario_modelo(formulario):
         except Exception as error:
             print(error)
     return usuario_creado
+"""
 
 #view Usuario buscar 
 

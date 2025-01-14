@@ -83,6 +83,18 @@ class UsuarioForm(UserCreationForm):
         
         return self.cleaned_data
 
+#Formulario para el login
+class LoginForm(forms.Form):
+    email = forms.EmailField(
+        label="Correo Electrónico")
+    password = forms.CharField(
+        label="Contraseña")
+    def clean(self):
+        super().clean()
+        return self.cleaned_data
+
+
+
 class CompradorForm(ModelForm):
     class Meta:
         model = Comprador
